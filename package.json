@@ -1,0 +1,16 @@
+{
+  "name": "shift-visualize",
+  "version": "0.0.1",
+  "author": {
+    "name": "Fabio Crisci"
+  },
+  "devDependencies": {
+    "browserify": "^8.0.3",
+    "shift-parser": "^1.0.1",
+    "watchify": "^2.2.1"
+  },
+  "scripts": {
+    "build": "browserify -o public/js/shift-parser.js -s shift -r shift-parser"
+  },
+  "license": "MIT"
+}
