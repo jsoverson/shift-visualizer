@@ -9,8 +9,36 @@ h1 {
 	font-size: 14px;
 }
 
+.syntax-error {
+	position:absolute;
+	background:hsla(0,100%,86%,0.4);
+	z-index:20
+}
+
+#tree-container.error {
+	/*box-shadow: inset 0px 0px 6px 0px black;*/
+	/*background-color: hsl(0,100%,98%);*/
+}
+
+#tree-container {
+	padding: 5px;
+	transition-property: box-shadow, background-color;
+	transition-duration:50ms;
+}
+
+.error #tree {
+	/*transform:perspective(800px) translateZ(-5px);*/
+	opacity:.5;
+
+}
+
+#tree {
+	transition:transform 50ms;
+	transform:perspective(800px);
+}
+
 .hidden {
-	opacity: 0;
+	visibility: hidden;
 }
 
 .content {
@@ -20,121 +48,6 @@ h1 {
 
 header {
 	margin-bottom:8px;
-}
-
-aside {
-	background: #f1cccc;
-	padding: 0.3em 1em;
-	border-radius: 3px;
-	color: #163246;
-	position: absolute;
-	transition: opacity 0.4s;
-	z-index: -1;
-}
-
-.out {
-    padding: 0.5em; 
-}
-
-#tree ul {
-	margin: 0;
-	margin-bottom: 6px;
-	list-style: none;
-	box-sizing: border-box;
-}
-#tree ul:first-of-type {
-	padding-left: 6px;
-}
-
-#tree li {
-	outline: 0;
-	list-style: none;
-	cursor:pointer;
-}
-
-.key:hover {
-	background-color: hsl(231, 41.7%, 90%);
-}
-
-.more {
-	display: inline-block;
-	vertical-align: top;
-	margin-top: 0.2em;
-	margin-left: 1em;
-}
-.closed .more {
-	margin-top: 0;
-	margin-left: 0;
-}
-.key:after {
-	content: "\A";
-}
-.closed .key:after, .plain .key:after {
-	content: "";
-}
-
-#tree {
-	font-family: Consolas, "Liberation Mono", Courier, monospace;
-	white-space: pre-line;
-}
-#tree i {
-	display: inline-block;
-	width: 1em;
-	height: auto;
-	line-height: normal;
-	vertical-align: baseline;
-	background-image: none;
-	background-position: 0% 0%;
-	background-repeat: repeat;
-	margin-top: 0;
-	font-family: FontAwesome;
-	font-weight: normal;
-	font-style: normal;
-	text-decoration: inherit;
-	-webkit-font-smoothing: antialiased;
-}
-#tree i:before {
-	text-decoration: inherit;
-	display: inline-block;
-	cursor: default;
-	speak: none;
-}
-#tree .expand > i:before {
-	content: "\f0d7";
-}
-#tree .expand.closed > i:before {
-	content: "\f0da";
-}
-#tree i:before {
-	content: " ";
-}
-
-.plain, .closed {
-	white-space: nowrap;
-}
-.key {
-	color: #606aa1;
-	margin-right: 0.5em;
-	padding:1px;
-}
-.value {
-	color: #4687b8;
-}
-.value.string {
-	color: #da564a;
-}
-.value.undefined {
-	color: #aaa;
-	font-style: italic;
-}
-.value.number {
-	color: #4687b8;
-}
-.value.function {
-	color: #606aa1;
-}
-.value.boolean {
-	color: #4687b8;
 }
 
 footer {

@@ -9,11 +9,13 @@
 
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 
-  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-old-ie-min.css">
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
   <link rel="stylesheet" href="http://purecss.io/combo/1.17.30?/css/layouts/blog.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css" />
 
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="bower_components/polymer/polymer.html"/>
+  <link rel="import" href="bower_components/ui-treeview/ui-treeview.html"/>
 
   <link rel="stylesheet" type="text/css" href="public/css/style.css"/>
   <link rel="stylesheet" type="text/css" href="public/css/font-awesome.min.css"/>
@@ -61,9 +63,9 @@ function add(a, b) {
         </header>
 
 
-        <aside id="error" class="hidden">Error</aside>
-        <div id="tree"></div>
-
+        <div id="tree-container">
+          <ui-treeview expanded id="tree"></ui-treeview>
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +74,6 @@ function add(a, b) {
   <script src="bower_components/ace-builds/src-min/ace.js"></script>
   <script src="bower_components/ace-builds/src-min/mode-javascript.js"></script>
   <script src="bower_components/ace-builds/src-min/theme-monokai.js"></script>
-  <script src="public/js/jquery-2.0.2.min.js"></script>
   <script src="public/js/shift-parser.js"></script>
   <script src="public/js/main.js"></script>
 </body>

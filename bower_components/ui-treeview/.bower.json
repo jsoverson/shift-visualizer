@@ -1,0 +1,35 @@
+{
+  "name": "ui-treeview",
+  "authors": [
+    "Jarrod Overson <jsoverson@gmail.com>"
+  ],
+  "description": "javascript object data display as a tree",
+  "main": "./ui-treeview.html",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "http://github.com/jsoverson/ui-treeview",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~0.5.2"
+  },
+  "_release": "08a0205f81",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "08a0205f814800782155f8f6bc5f1ec7731cf4f1"
+  },
+  "_source": "git://github.com/jsoverson/ui-treeview.git",
+  "_target": "*",
+  "_originalSource": "ui-treeview",
+  "_direct": true
+}

@@ -1,130 +1,97 @@
-/* globals ace, rocambole, $, jQuery */
-(function () {
-	"use strict";
-	var editor = ace.edit("editor");
-	var error = document.getElementById("error");
-	var tree = $("#tree");
-	var ast;
+"use strict";
 
-	function displayError (exception) {
-		error.className = "";
-		error.innerHTML = exception.message;
-		tree.addClass("hidden");
-	}
+// fn from http://underscorejs.org/docs/underscore.html
+// https://github.com/jashkenas/underscore/blob/master/LICENSE
+function debounce(func, wait, immediate) {
+  var timeout, args, context, timestamp, result;
 
-	function hideError () {
-		error.className = "hidden";
-	}
+  var later = function() {
+    var last = Date.now() - timestamp;
 
-	function displayTree () {
-		hideError();
-		tree.removeClass("hidden");
+    if (last < wait && last > 0) {
+      timeout = setTimeout(later, wait - last);
+    } else {
+      timeout = null;
+      if (!immediate) {
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+      }
+    }
+  };
 
-		var content = generateList("", ast);
-		tree.html(content);
-	}
+  return function() {
+    context = this;
+    args = arguments;
+    timestamp = Date.now();
+    var callNow = immediate && !timeout;
+    if (!timeout) timeout = setTimeout(later, wait);
+    if (callNow) {
+      result = func.apply(context, args);
+      context = args = null;
+    }
 
-	function generateList (path, ast) {
-		var content = $("<ul>");
-		for (var key in ast) {
-			var fullPath = path ? path + "|" + key : key;
-			console.log(ast[key]);
-			if (jQuery.isArray(ast[key])) {
-				console.log('isArray')
-				content.append(generateRecurringNode(fullPath, key, ast[key]));
-			} else if (jQuery.isPlainObject(ast[key])) {
-				console.log('isPlainObject')
-				content.append(generateObjectNode(fullPath, key, ast[key]));
-			} else if (ast[key] && ast[key].type) {
-				console.log('constructor')
-				content.append(generateObjectNode(fullPath, key, ast[key]));
-			} else {
-				console.log('otherwise')
-				content.append(generatePlainNode(key, ast[key]));
-			}
-		}
-		return content;
-	}
+    return result;
+  };
+}
 
-	function expandableTemplate (model) {
-		var tpl = "<li data-id='%id%' data-collapsed='%value%' class='expand closed'><i/><span class='key'>%key%:</span><div class='more'>%value%</div></li>";
-		return tpl.replace(/%([a-z]+)%/g, function (wholeMatch, key) {
-			return model[key];
-		});
-	}
+var editor = ace.edit("editor"),
+    session = editor.getSession(),
+    Range = ace.require('ace/range').Range;
 
-	function generateObjectNode (path, key, ast) {
-		var model = {
-			id : path,
-			key : key,
-			value : "{}"
-		};
-		return $(expandableTemplate(model));
-	}
+var error = document.getElementById("error");
+var tree = document.getElementById("tree");
+var treeContainer = document.getElementById("tree-container");
 
-	function generateRecurringNode (path, key, ast) {
-		var model = {
-			id : path,
-			key : key,
-			value : "[" + ast.length + "]"
-		};
-		return $(expandableTemplate(model));
-	}
 
-	function generatePlainNode (key, value) {
-		var actualValue = (value && value.call) ? "function () {}" : JSON.stringify(value);
-		return $("<li class='plain'><i/><span class='key'>" + key + ":</span><span class='value " + typeof value + "'>" + actualValue + "</span></li>");
-	}
+var markers = [];
 
-	editor.setTheme("ace/theme/monokai");
-	editor.getSession().setMode("ace/mode/javascript");
+function displayError(exception) {
+  hideError();
+  if (exception.line) {
+    session.setAnnotations([{
+      row: exception.line,
+      column: exception.column,
+      text: exception.description,
+      type: "error" // also warning and information
+    }]);
+    markers.push(session.addMarker(new Range(exception.line, 0, exception.line , 1), "syntax-error", "fullLine"));
+  }
+  treeContainer.classList.add("error");
+}
 
-	function onChange () {
-		var code = editor.getValue();
-		try {
-			ast = shift.default(code);
-			//ast = rocambole.parse(code);
-			displayTree();
-		} catch (ex) {
-			displayError(ex);
-		}
-	}
+function hideError() {
+  session.clearAnnotations();
+  markers.forEach(function(marker){
+    session.removeMarker(marker);
+  });
+}
 
-	editor.getSession().on('change', onChange);
-	// when ready
-	$(onChange);
 
-	tree.on("click", "li.expand", function (event) {
-		var element = $(this);
-		var target = $(event.target);
+function displayTree(ast) {
+  hideError();
+  treeContainer.classList.remove("error");
+  tree.display(ast);
+}
 
-		if (!target.is(".expand") && !target.parent().is(".expand")) {
-			// Don't react on clicks inside .more
-			event.stopPropagation();
-			return;
-		}
+editor.setTheme("ace/theme/monokai");
+session.setOption("useWorker", false);
+session.setMode("ace/mode/javascript");
 
-		if (element.hasClass("closed")) {
-			var id = element.data("id");
-			var object = extractObject(id);
-			var content = generateList(id, object);
-			element.children(".more").html(content);
-			element.removeClass("closed");
-			event.stopPropagation();
-		} else {
-			element.children(".more").html(element.attr("data-collapsed"));
-			element.addClass("closed");
-			event.stopPropagation();
-		}
-	});
+function onChange() {
+  var code = editor.getValue();
+  try {
+    var ast = shift.default(code);
+    displayTree(ast);
+  } catch (ex) {
+    displayError(ex);
+  }
+}
 
-	function extractObject (id) {
-		var path = id.split("|");
-		var container = ast;
-		while (path.length > 0) {
-			var token = path.shift();
-			container = container[token];
-		}
-		return container;
-	}
-})();
+editor.getSession().on('change', debounce(onChange, 300));
+
+
+window.addEventListener('polymer-ready', function () {
+  onChange();
+})
+
+
