@@ -34,10 +34,12 @@
        <span id="editor" spellcheck="false">
 "use strict";
 
-let myvar = add(2, 3);
+let [x,y,z] = [1,2,3].map( _ => _ * 2 );
 
-function add(a, b) {
-  return a + b;
+class Person {
+    constructor(name) {
+        this.name = name
+    }
 }
 
 </span>
