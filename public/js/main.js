@@ -47,6 +47,7 @@ var markers = [];
 
 function displayError(exception) {
   hideError();
+  console.dir(exception);
   if (exception.line) {
     session.setAnnotations([{
       row: exception.line,
