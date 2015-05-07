@@ -6,11 +6,14 @@
   },
   "devDependencies": {
     "browserify": "^8.0.3",
-    "shift-parser": "^2.0.0",
+    "shift-parser": "*",
     "watchify": "^2.2.1"
   },
   "scripts": {
     "build": "browserify -o public/js/shift-parser.js -s shift -r shift-parser"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "shift-parser": "^2.0.0"
+  }
 }
