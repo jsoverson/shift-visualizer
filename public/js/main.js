@@ -80,7 +80,7 @@ session.setMode("ace/mode/javascript");
 function onChange() {
   var code = editor.getValue();
   try {
-    var ast = shift.parseModule(code, { loc: true, earlyErrors : true });
+    var ast = shift.parseModule(code, { loc: false, earlyErrors : true });
     displayTree(ast);
   } catch (ex) {
     displayError(ex);
